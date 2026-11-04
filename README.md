@@ -21,6 +21,10 @@
 [陳大文] 我補充一下,API 那邊週三前會好,到時候再一起測。
 ```
 
+> [!WARNING]
+> **只支援 Apple Silicon(M1 之後)的 Mac + Google Chrome。** Windows、Linux、Intel 晶片的 Mac 都**不能**使用,
+> 見 [支援的環境](#platforms)。
+
 > [!IMPORTANT]
 > **使用前請先閱讀 [⚖️ 使用聲明與法律責任](#legal)。**這個工具錄音時,其他與會者畫面上**不會**出現任何錄音提示,
 > 是否合法、是否需要取得同意,由使用者自行確認並承擔責任。
@@ -100,6 +104,22 @@ GMScribe/
 ---
 
 ## 🚀 快速開始
+
+<a id="platforms"></a>
+
+### 支援的環境
+
+| 電腦 / 瀏覽器 | 能不能用 | 原因 |
+|---|:---:|---|
+| Mac,Apple Silicon(M1、M2、M3、M4…) | ✅ | 開發與測試的環境 |
+| Mac,Intel 晶片 | ❌ | 語音辨識與潤飾用的 MLX 只能在 Apple Silicon 上執行 |
+| Windows | ❌ | 同上;安裝腳本、伺服器開關也只寫了 macOS 的版本 |
+| Linux | ❌ | 同上 |
+| Google Chrome | ✅ | |
+| Edge、Brave、Arc 等其他 Chromium 瀏覽器 | ⚠️ | 擴充功能也許能載入,但從 popup 開關伺服器不會生效,沒有測試過 |
+| Safari、Firefox | ❌ | 擴充功能是 Chrome 專用格式 |
+
+> 不確定自己的 Mac 是哪種晶片:點左上角  →「關於這台 Mac」,「晶片」那一欄寫 Apple M 開頭就可以用。
 
 ### 需要準備
 
