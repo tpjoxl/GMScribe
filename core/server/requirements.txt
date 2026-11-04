@@ -1,0 +1,24 @@
+# 版本鎖定在實際驗證過能正常運作的組合(2026-10-29)。torch/torchaudio/torchcodec 也一起鎖:
+# pyannote 依賴的 torchcodec 對 torch 版本很敏感,版本跑掉語者分離就會壞。
+mlx-whisper==0.4.3
+mlx-lm==0.31.3
+opencc-python-reimplemented==0.1.7
+fastapi==0.141.1
+uvicorn[standard]==0.53.0
+python-multipart==0.0.32
+pyannote.audio==4.0.7
+mlx==0.32.2
+torch==2.14.0
+torchaudio==2.11.0
+torchcodec==0.16.0
+transformers==5.17.0
+numpy==2.5.3
+
+# silero-vad 故意不放在這個檔案的一般清單裡:它的套件相依寫死要求
+# torchaudio<2.10,但 pyannote.audio 4.0(上面那行裝的)需要比較新版的
+# torchaudio/torchcodec 才能動,兩個一起裝 pip 會自動把 torch 降版本,
+# 順便弄壞 pyannote 依賴的 torchcodec。silero-vad 這個專案只用得到它的
+# 核心 VAD 函式(load_silero_vad / get_speech_timestamps),不會用到需要
+# torchaudio 的 read_audio() 之類輔助函式,所以用 --no-deps 裝、跳過它宣告
+# 的版本檢查是安全的。裝的順序一定要「先裝完上面這份清單,再單獨裝
+# silero-vad」,細節看 CLAUDE.md 的環境設定指令。

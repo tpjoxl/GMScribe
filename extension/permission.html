@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GMScribe 麥克風授權</title>
+  <link rel="icon" href="icons/icon32.png" />
+  <style>
+    :root {
+      --bg: #eef3f4; --card: #ffffff; --fg: #1f2328; --muted: #5f6b73; --border: #dfe6e8;
+      --teal: #1b5866; --teal-soft: #e3eef0; --ok: #16a34a; --warn: #b45309; --warn-soft: #fef3c7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #14191b; --card: #1f2528; --fg: #e5e7eb; --muted: #9aa6ad; --border: #2f383c;
+              --teal-soft: #213a40; --warn-soft: #3a2e12; --warn: #f5c66b; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px;
+           background: var(--bg); color: var(--fg);
+           font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", sans-serif; }
+    .card { width: 100%; max-width: 440px; background: var(--card); border: 1px solid var(--border);
+            border-radius: 20px; padding: 32px 28px 28px; text-align: center;
+            box-shadow: 0 12px 32px rgba(27, 88, 102, 0.12); }
+    .cat { width: 112px; height: 112px; border-radius: 26px; display: block; margin: 0 auto 16px;
+           box-shadow: 0 6px 16px rgba(27, 88, 102, 0.25); }
+    .card.waiting .cat { animation: bob 2.4s ease-in-out infinite; }
+    @keyframes bob { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-6px) rotate(-3deg); } }
+    @media (prefers-reduced-motion: reduce) { .card.waiting .cat { animation: none; } }
+    h1 { font-size: 20px; margin: 0 0 6px; }
+    .lead { margin: 0 0 20px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .choices { display: grid; gap: 8px; text-align: left; margin-bottom: 16px; }
+    .choice { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px;
+              font-size: 14px; border: 1px solid var(--border); color: var(--muted); }
+    .choice.pick { border: 2px solid var(--teal); background: var(--teal-soft); color: var(--fg); font-weight: 600; }
+    .choice .tag { margin-left: auto; font-size: 12px; font-weight: 600; white-space: nowrap; }
+    .choice.pick .tag { color: var(--teal); }
+    @media (prefers-color-scheme: dark) { .choice.pick { border-color: #6fb3c2; } .choice.pick .tag { color: #9fd2dd; } }
+    .note { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 0; }
+    #status { margin-top: 18px; font-size: 15px; font-weight: 600; min-height: 1.5em; }
+    #status.ok { color: var(--ok); }
+    #status.warn { color: var(--warn); background: var(--warn-soft); padding: 10px 12px; border-radius: 10px;
+                   font-size: 13px; font-weight: 500; line-height: 1.6; text-align: left; }
+    #grant { display: none; margin-top: 14px; font: inherit; font-size: 14px; font-weight: 600; padding: 10px 20px;
+             border: 0; border-radius: 10px; background: var(--teal); color: #fff; cursor: pointer; }
+    #grant:hover { filter: brightness(1.1); }
+  </style>
+</head>
+<body>
+  <main class="card waiting" id="card">
+    <img class="cat" src="icons/icon256.png" alt="" />
+    <h1>讓 GMScribe 使用麥克風</h1>
+    <p class="lead">錄音時要把你自己說的話一起收進逐字稿。<br />瀏覽器跳出詢問視窗時,請選:</p>
+    <div class="choices">
+      <div class="choice pick">造訪這個網站時允許<span class="tag">✓ 選這個</span></div>
+      <div class="choice">這次允許<span class="tag">關掉分頁就失效</span></div>
+      <div class="choice">一律不允許<span class="tag">無法錄到你的聲音</span></div>
+    </div>
+    <p class="note">這裡的「網站」指的是 GMScribe 擴充功能本身,其他網站不會因此取得你的麥克風。</p>
+    <div id="status"></div>
+    <button id="grant">再試一次</button>
+  </main>
+  <script src="permission.js"></script>
+</body>
+</html>

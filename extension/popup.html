@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>GMScribe</title>
+  <style>
+    :root {
+      --bg: #ffffff; --fg: #1f2328; --muted: #6b7280; --border: #e5e7eb;
+      --primary: #2563eb; --primary-hover: #1d4ed8;
+      --danger: #dc2626; --danger-hover: #b91c1c;
+      --ok: #16a34a; --off: #9ca3af; --soft: #f3f4f6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #1f2125; --fg: #e5e7eb; --muted: #9ca3af; --border: #374151; --soft: #2a2d33; }
+    }
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, "PingFang TC", sans-serif; width: 340px; margin: 0; padding: 16px;
+           background: var(--bg); color: var(--fg); }
+    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    h3 { margin: 0; font-size: 15px; font-weight: 600; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted);
+            padding: 3px 10px; border-radius: 999px; background: var(--soft); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--off); }
+    .dot.on { background: var(--ok); }
+    .dot.rec { background: var(--danger); animation: blink 1.2s infinite; }
+    @keyframes blink { 50% { opacity: .3; } }
+    button { width: 100%; font-size: 14px; font-weight: 500; padding: 10px 14px; margin-top: 8px;
+             border-radius: 8px; border: 1px solid var(--border); background: var(--soft); color: var(--fg);
+             cursor: pointer; transition: background .15s, opacity .15s; }
+    button:hover:not(:disabled) { filter: brightness(0.96); }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    button.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+    button.primary:hover:not(:disabled) { background: var(--primary-hover); filter: none; }
+    button.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+    button.danger:hover:not(:disabled) { background: var(--danger-hover); filter: none; }
+    button.outline-danger { background: transparent; border-color: var(--danger); color: var(--danger); }
+    #status { margin-top: 12px; font-size: 13px; line-height: 1.5; color: var(--muted); white-space: pre-wrap; }
+    textarea { width: 100%; height: 160px; margin-top: 8px; font-size: 12px; border-radius: 8px;
+               border: 1px solid var(--border); background: var(--soft); color: var(--fg); padding: 8px; }
+    .hint { font-size: 11px; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+    #progressLabel { display: none; margin-top: 12px; font-size: 13px; color: var(--fg);
+                     justify-content: space-between; gap: 8px; }
+    #progressLabel strong { font-weight: 600; font-variant-numeric: tabular-nums; }
+    #progress { display: none; width: 100%; height: 8px; margin-top: 6px; }
+    #speedBox { display: none; margin-top: 12px; padding: 10px 12px; border-radius: 8px;
+                border: 1px solid var(--border); background: var(--soft); font-size: 12px; }
+    #speedBox .row { display: flex; justify-content: space-between; align-items: baseline; color: var(--muted); }
+    #speedBox .row strong { color: var(--fg); font-size: 13px; font-weight: 600; }
+    #speed { width: 100%; margin: 8px 0 4px; accent-color: var(--primary); }
+    #speedNote { margin-top: 6px; color: var(--muted); line-height: 1.5; }
+    #multiMeetWarn { display: none; margin-top: 10px; padding: 8px 10px; border-radius: 8px; font-size: 12px; line-height: 1.5;
+                     background: #FEF3C7; color: #92400E; }
+    #updateBanner { display: none; margin-top: 10px; padding: 8px 10px; border-radius: 8px; font-size: 12px; line-height: 1.5;
+                    background: #DBEAFE; color: #1E3A8A; }
+    #updateBanner code { font-size: 11px; }
+    .prefs { margin-top: 12px; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; }
+    .prefs summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 6px; padding: 2px 0; }
+    .prefs summary::-webkit-details-marker { display: none; }
+    .prefs summary::before { content: "▸"; color: var(--muted); font-size: 11px; transition: transform .15s; }
+    .prefs[open] summary::before { transform: rotate(90deg); }
+    .prefs summary span { margin-left: auto; font-size: 12px; color: var(--muted); }
+    .prefs[open] summary { margin-bottom: 4px; }
+    .prefs label { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 0; cursor: pointer; }
+    .prefs input { width: 32px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+    .prefs .note { font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h3>GMScribe</h3>
+    <span class="pill"><span id="serverDot" class="dot"></span><span id="serverText">檢查中</span></span>
+  </header>
+  <button id="server" disabled>檢查伺服器中...</button>
+  <button id="toggle" class="primary" disabled>開始錄音</button>
+  <button id="retry" style="display:none">重新上傳上次的錄音</button>
+  <button id="check" style="display:none">檢查逐字稿狀態</button>
+  <div id="updateBanner"></div>
+  <div id="multiMeetWarn">⚠️ 目前開著不只一個 Google Meet 分頁。一次只能錄一場會議,同時開多個會議容易錄錯、或把你在另一場講的話錄進來。建議只留要錄的那一場。</div>
+  <details class="prefs" id="prefsBox">
+    <summary>錄音時的畫面<span id="prefsSummary"></span></summary>
+    <label>錄音時隱藏字幕<input type="checkbox" id="hideCaptions" /></label>
+    <label>錄音時隱藏與會者名單<input type="checkbox" id="hidePeoplePanel" /></label>
+    <div class="note">錄音時會自動打開字幕和與會者名單,用來分辨誰在講話;這裡只決定要不要在畫面上藏起來。字幕只有你看得到。藏起來後,Meet 原本留給它們的位置會留白。</div>
+  </details>
+  <div id="progressLabel"><span id="progressStage"></span><strong id="progressPct"></strong></div>
+  <progress id="progress" max="100" value="0"></progress>
+  <div id="speedBox">
+    <div class="row"><strong>潤飾速度</strong><span id="speedVal"></span></div>
+    <input type="range" id="speed" min="15" max="100" step="5" />
+    <div class="row"><span>省資源</span><span>快</span></div>
+    <div id="speedNote"></div>
+  </div>
+  <div id="status">尚未開始</div>
+  <textarea id="transcript" style="display:none" readonly></textarea>
+  <button id="copy" style="display:none">複製逐字稿</button>
+  <div class="hint">先啟動錄音伺服器才能開始錄音。錄音時不要關掉 Google Meet 分頁。按下停止後即可關閉此視窗,轉錄會在背景完成,逐字稿存在專案的 recordings/ 資料夾裡。</div>
+  <script src="popup.js"></script>
+</body>
+</html>

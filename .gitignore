@@ -1,0 +1,19 @@
+# 會議錄音、逐字稿、會議紀錄:每個人自己的資料,不進版控
+recordings/
+
+# 個人的固定錯字對照(同事名字、內部用語);範本是 glossary.example.txt
+glossary.txt
+# 關掉新版檢查用的標記檔(見 README「更新到新版本」)
+.no-update-check
+
+# 執行時產生的檔案
+core/logs/
+core/native_host/.extension_id
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Claude Code 的本機狀態(專案 skill 在 .claude/skills/,要進版控)
+.claude/*
+!.claude/skills/

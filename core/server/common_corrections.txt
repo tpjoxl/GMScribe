@@ -1,0 +1,31 @@
+# GMScribe 內建的常見辨識錯誤修正(隨專案附上,所有人適用)。
+# 格式跟 glossary.txt 一樣:「錯的寫法 | 另一種錯的寫法 => 正確寫法」,含英文的不分大小寫、前後不能緊接著英數字。
+# 收錄原則:左邊的寫法在任何情境下都不會是正確用詞,換掉不會誤判。只出現在特定公司/會議的詞(同事名字、
+# 內部專案名)請放在自己的 glossary.txt;一般詞彙也可能被聽錯的(例如「前段」可能是「前段時間」)不收。
+Coreview | Core review | CodeReview => Code Review
+Wordpress | Word Press => WordPress
+Github | Git hub => GitHub
+Gitlab | Git lab => GitLab
+Javascript | Java Script => JavaScript
+Typescript | Type Script => TypeScript
+Chat GPT | Chatgpt | TradeGPT => ChatGPT
+Mysql => MySQL
+Postgresql => PostgreSQL
+VSCode | Vscode => VS Code
+N8N => n8n
+Rubbers.txt | Robbers.txt | Robo.txt => robots.txt
+# 產品名稱的大小寫/空格統一(只收本身不是一般英文單字的名稱;Teams、Slack、Notion 這種不收)
+Youtube | You Tube => YouTube
+Linkedin | Linked In => LinkedIn
+Iphone => iPhone
+Ipad => iPad
+Macbook | Mac Book => MacBook
+Powerpoint | Power Point => PowerPoint
+Onedrive | One Drive => OneDrive
+Sharepoint | Share Point => SharePoint
+Powerbi | Power Bi => Power BI
+Nodejs | Node js => Node.js
+Nextjs | Next js => Next.js
+Mongodb | Mongo DB => MongoDB
+Postgre SQL => PostgreSQL
+Dockerhub | Docker hub => Docker Hub
